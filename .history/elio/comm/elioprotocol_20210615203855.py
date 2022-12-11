@@ -1,9 +1,10 @@
-# -*- coding:utf-8 -*-
+#-*- coding:utf-8 -*-
 import binascii
 
+from comm.protocol import Protocol
 
-UDP = 0x30
-CMD_EXECUTE = 0x01
+UDP = 0x30;
+CMD_EXECUTE = 0x01;
 
 
 class ElioProtocol(Protocol):
@@ -23,20 +24,21 @@ class ElioProtocol(Protocol):
     # __line2 = None;
 
     def __init__(self):
-        self.dc1 = 0
-        self.dc2 = 0
-        self.sv1 = 0
-        self.sv2 = 0
-        self.v3 = 0
-        self.v5 = 0
-        self.io1 = 0
-        self.io2 = 0
-        self.io3 = 0
-        self.io4 = 0
+        self.dc1 = 0;
+        self.dc2 = 0;
+        self.sv1 = 0;
+        self.sv2 = 0;
+        self.v3 = 0;
+        self.v5 = 0;
+        self.io1 = 0;
+        self.io2 = 0;
+        self.io3 = 0;
+        self.io4 = 0;
 
-        self.ultra = 0
-        self.line1 = 0
-        self.line2 = 0
+        self.ultra = 0;
+        self.line1 = 0;
+        self.line2 =0;
+
 
     def decideToUseSensor(self, ultra, line1, line2):
         self.ultra = ultra
@@ -44,6 +46,7 @@ class ElioProtocol(Protocol):
         self.line2 = line2
 
         self.sendDeviceData()
+
 
     def connection_made(self, transport):
         self.transport = transport
@@ -53,32 +56,32 @@ class ElioProtocol(Protocol):
         self.transport = None
 
     def data_received(self, data, len):
-        cmd = data[0]
-        udp = data[1]
+        cmd = data[0];
+        udp = data[1];
 
-        self.DC1 = data[2]
-        self.DC2 = data[3]
+        self.DC1 = data[2];
+        self.DC2 = data[3];
 
-        self.SV1 = data[4]
-        self.SV2 = data[5]
+        self.SV1 = data[4];
+        self.SV2 = data[5];
 
-        self.V3 = data[6]
-        self.V5 = data[7]
+        self.V3 = data[6];
+        self.V5 = data[7];
 
-        self.IO1 = data[8]
-        self.IO2 = data[9]
-        self.IO3 = data[10]
-        self.IO4 = data[11]
+        self.IO1 = data[8];
+        self.IO2 = data[9];
+        self.IO3 = data[10];
+        self.IO4 = data[11];
 
         self.SONIC = (data[12] | data[13] << 8)
-        self.LINE1 = (data[14] | data[15] << 8) == 0 if 1 else 0
-        self.LINE2 = (data[16] | data[17] << 8) == 0 if 1 else 0
+        self.LINE1 = (data[14] | data[15] << 8) == 0 if 1 else 0;
+        self.LINE2 = (data[16] | data[17] << 8) == 0 if 1 else 0;
 
-        print("dc1=", self.dc1, ", dc2=", self.dc2, ", sv1=", self.sv1, ", sv2=", self.sv2,
-              ", io1=", self.io1, ", io2=", self.io2, ", io3=", self.io3, ", io4=", self.io4,
-              ", SONIC=", self.SONIC, ", LINE1=", self.LINE1, ", LINE2=", self.LINE2)
+        print ("dc1=",self.dc1, ", dc2=",self.dc2,", sv1=",self.sv1, ", sv2=",self.sv2,
+               ", io1=",self.io1, ", io2=",self.io2, ", io3=",self.io3, ", io4=",self.io4,
+               ", SONIC=",self.SONIC,", LINE1=",self.LINE1,", LINE2=",self.LINE2)
 
-    def write(self, data, len):
+    def write(self,data, len):
         # print(binascii.hexlify(data))
         self.transport.packet.send_packet(data, len)
 
@@ -95,7 +98,7 @@ class ElioProtocol(Protocol):
         # p.write(init)
 
     def sendIO(self, which_io, value):
-        print('sendIO')
+        print ('sendIO')
         if (which_io == "3V"):
             self.v3 = value
         elif (which_io == "5V"):
@@ -105,50 +108,50 @@ class ElioProtocol(Protocol):
         elif (which_io == "IO2"):
             self.io2 = value
         elif (which_io == "IO3"):
-            self.io3 = value
+            self.io3= value
         elif (which_io == "IO4"):
-            self.io4 = value
+            self.io4= value
 
         self.sendDeviceData()
 
     def sendDC(self, dc1, dc2):
-        print('sendDC')
+        print ('sendDC')
         self.dc1 = dc1
         self.dc2 = dc2
 
         self.sendDeviceData()
 
     def sendServo(self, sv1, sv2):
-        print('sendServo')
+        print ('sendServo')
         self.sv1 = sv1
         self.sv2 = sv2
         self.sendDeviceData()
 
     def sendDeviceData(self):
         buffer = bytearray(15)
-        buffer[0] = UDP
-        buffer[1] = CMD_EXECUTE
+        buffer[0] = UDP;
+        buffer[1] = CMD_EXECUTE;
 
-        buffer[2] = self.dc1
-        buffer[3] = self.dc2
-        buffer[4] = self.sv1
-        buffer[5] = self.sv2
-        buffer[6] = self.v3
-        buffer[7] = self.v5
-        buffer[8] = self.io1
-        buffer[9] = self.io2
-        buffer[10] = self.io3
-        buffer[11] = self.io4
+        buffer[2] = self.dc1;
+        buffer[3] = self.dc2;
+        buffer[4] = self.sv1;
+        buffer[5] = self.sv2;
+        buffer[6] = self.v3;
+        buffer[7] = self.v5;
+        buffer[8] = self.io1;
+        buffer[9] = self.io2;
+        buffer[10] = self.io3;
+        buffer[11] = self.io4;
 
-        buffer[12] = self.ultra
-        buffer[13] = self.line1
-        buffer[14] = self.line2
+        buffer[12] = self.ultra;
+        buffer[13] = self.line1;
+        buffer[14] = self.line2;
         self.write(bytearray(buffer), 15)
 
     def sendTXRX(self):
         buffer = bytearray(4)
-        buffer[0] = UDP
-        buffer[1] = 0xf5
-        buffer[2] = 1
-        buffer[3] = 'a'
+        buffer[0] = UDP;
+        buffer[1] = 0xf5;
+        buffer[2] = 1;
+        buffer[3] = 'a';
         self.write(bytearray(buffer), 4)

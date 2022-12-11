@@ -1,11 +1,11 @@
-# -*- coding:utf-8 -*-
+#-*- coding:utf-8 -*-
 
 import time
-from elio.comm.eliochannel import eliochannel
-from elio.comm.elioprotocol import ElioProtocol
-from elio.comm.packet_t import packet_t
 import serial
 
+from comm.eliochannel import eliochannel
+from comm.elioprotocol import ElioProtocol
+from comm.packet_t import packet_t
 
 if __name__ == "__main__":
 
@@ -30,3 +30,4 @@ if __name__ == "__main__":
             time.sleep(1)
             # p.sendIO("IO4", 0)
             time.sleep(1)
+

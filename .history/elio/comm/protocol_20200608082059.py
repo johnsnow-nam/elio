@@ -1,4 +1,4 @@
-# -*- coding:utf-8 -*-
+#-*- coding:utf-8 -*-
 class Protocol(object):
     """\
     Protocol as used by the ReaderThread. This base class provides empty

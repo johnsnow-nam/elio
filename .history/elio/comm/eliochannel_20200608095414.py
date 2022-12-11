@@ -1,4 +1,4 @@
-# -*- coding:utf-8 -*-
+#-*- coding:utf-8 -*-
 import threading
 
 import serial
@@ -28,7 +28,7 @@ class eliochannel(threading.Thread):
         self._lock = threading.Lock()
         self._connection_made = threading.Event()
         self.protocol = None
-        self.packet = None
+        self.packet =   None;
 
     def stop(self):
         """Stop the reader thread"""
@@ -43,8 +43,7 @@ class eliochannel(threading.Thread):
             self.serial.timeout = 1
         self.protocol = self.protocol_factory()
 
-        self.packet = self.packet_factory(
-            self.protocol.data_received, self.protocol.write_packet)
+        self.packet = self.packet_factory(self.protocol.data_received, self.protocol.write_packet)
         try:
             self.protocol.connection_made(self)
         except Exception as e:
@@ -72,8 +71,8 @@ class eliochannel(threading.Thread):
                         convert_buffer = bytearray(data)
 
                         # print(convert_buffer)
-                        for ch in convert_buffer:
-                            self.packet.add(ch)
+                        for ch in convert_buffer :
+                            self.packet.add(ch);
                         # self.protocol.data_received(data)
                     except Exception as e:
                         error = e
