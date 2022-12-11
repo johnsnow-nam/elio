@@ -1,6 +1,8 @@
 # -*- coding:utf-8 -*-
 import binascii
 
+from elio.comm.protocol import Protocol
+import struct
 
 UDP = 0x30
 CMD_EXECUTE = 0x01
@@ -23,6 +25,12 @@ class ElioProtocol(Protocol):
     # __line2 = None;
 
     def __init__(self):
+        self.initialize()
+        self.ultra = 0
+        self.line1 = 0
+        self.line2 = 0
+
+    def initialize(self):
         self.dc1 = 0
         self.dc2 = 0
         self.sv1 = 0
@@ -33,10 +41,6 @@ class ElioProtocol(Protocol):
         self.io2 = 0
         self.io3 = 0
         self.io4 = 0
-
-        self.ultra = 0
-        self.line1 = 0
-        self.line2 = 0
 
     def decideToUseSensor(self, ultra, line1, line2):
         self.ultra = ultra
@@ -125,25 +129,40 @@ class ElioProtocol(Protocol):
         self.sendDeviceData()
 
     def sendDeviceData(self):
-        buffer = bytearray(15)
-        buffer[0] = UDP
-        buffer[1] = CMD_EXECUTE
+        # buffer = bytearray(15)
+        buffer = struct.pack('bbbbbbbbbbbbbbb', UDP, CMD_EXECUTE,
+                             self.dc1,
+                             self.dc2,
+                             self.sv1,
+                             self.sv2,
+                             self.v3,
+                             self.v5,
+                             self.io1,
+                             self.io2,
+                             self.io3,
+                             self.io4, self.ultra, self.line1, self.line2)
 
-        buffer[2] = self.dc1
-        buffer[3] = self.dc2
-        buffer[4] = self.sv1
-        buffer[5] = self.sv2
-        buffer[6] = self.v3
-        buffer[7] = self.v5
-        buffer[8] = self.io1
-        buffer[9] = self.io2
-        buffer[10] = self.io3
-        buffer[11] = self.io4
+        self.write(buffer, 15)
 
-        buffer[12] = self.ultra
-        buffer[13] = self.line1
-        buffer[14] = self.line2
-        self.write(bytearray(buffer), 15)
+        # buffer[0] = UDP
+        # buffer[1] = CMD_EXECUTE
+        #
+        # buffer[2] = self.dc1
+        # buffer[3] = self.dc2
+        # buffer[4] = self.sv2
+        # buffer[6] = self.sv1
+        #         # buffer[5] = self.v3
+        # buffer[7] = self.v5
+        # buffer[8] = self.io1
+        # buffer[9] = self.io2
+        # buffer[10] = self.io3
+        # buffer[11] = self.io4
+        #
+        # buffer[12] = self.ultra
+        # buffer[13] = self.line1
+        # buffer[14] = self.line2
+        #
+        # self.write(bytearray(buffer), 15)
 
     def sendTXRX(self):
         buffer = bytearray(4)

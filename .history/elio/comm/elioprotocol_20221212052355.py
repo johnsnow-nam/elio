@@ -25,12 +25,6 @@ class ElioProtocol(Protocol):
     # __line2 = None;
 
     def __init__(self):
-        self.initialize()
-        self.ultra = 0
-        self.line1 = 0
-        self.line2 = 0
-
-    def initialize(self):
         self.dc1 = 0
         self.dc2 = 0
         self.sv1 = 0
@@ -41,6 +35,10 @@ class ElioProtocol(Protocol):
         self.io2 = 0
         self.io3 = 0
         self.io4 = 0
+
+        self.ultra = 0
+        self.line1 = 0
+        self.line2 = 0
 
     def decideToUseSensor(self, ultra, line1, line2):
         self.ultra = ultra

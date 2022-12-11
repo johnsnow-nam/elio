@@ -4,7 +4,7 @@ import setuptools
 
 setuptools.setup(
     name="elio",
-    version="3.0.3",
+    version="3.0.2",
     license='MIT',
     author="elio robotics",
     author_email="caram88@mobilian.biz",
