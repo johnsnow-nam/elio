@@ -1,0 +1,9 @@
+MANIFEST.in
+README.md
+setup.cfg
+setup.py
+elio.egg-info/PKG-INFO
+elio.egg-info/SOURCES.txt
+elio.egg-info/dependency_links.txt
+elio.egg-info/requires.txt
+elio.egg-info/top_level.txt
