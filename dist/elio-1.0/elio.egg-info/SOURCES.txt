@@ -1,7 +1,7 @@
-MANIFEST.in
 README.md
 setup.cfg
 setup.py
+elio/__init__.py
 elio.egg-info/PKG-INFO
 elio.egg-info/SOURCES.txt
 elio.egg-info/dependency_links.txt
